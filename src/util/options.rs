@@ -1,8 +1,11 @@
 use humantime::Duration as HumanDuration;
 use simplelog::LevelFilter;
+#[cfg(feature = "util")]
 use structopt::StructOpt;
-use driver_pal::hal::{DeviceConfig};
+#[cfg(feature = "util")]
+use driver_pal::hal::DeviceConfig;
 
+#[cfg(feature = "util")]
 #[derive(StructOpt)]
 #[structopt(name = "Sx127x-util")]
 /// A Command Line Interface (CLI) for interacting with a local Sx127x radio device
@@ -19,6 +22,7 @@ pub struct Options {
     pub log_level: LevelFilter,
 }
 
+#[cfg(feature = "util")]
 #[derive(StructOpt, PartialEq, Debug)]
 pub enum Command {
     #[structopt(name = "chip-version")]
@@ -34,6 +38,7 @@ pub enum Command {
     Gfsk(GfskCommand),
 }
 
+#[cfg(feature = "util")]
 #[derive(StructOpt, PartialEq, Debug)]
 pub enum Operation {
     #[structopt(name = "tx")]
@@ -53,6 +58,7 @@ pub enum Operation {
     Repeat(Repeat),
 }
 
+#[cfg(feature = "util")]
 #[derive(StructOpt, PartialEq, Debug)]
 pub struct LoRaCommand {
     /// LoRa frequency in MHz
@@ -64,6 +70,7 @@ pub struct LoRaCommand {
     pub operation: Operation,
 }
 
+#[cfg(feature = "util")]
 #[derive(StructOpt, PartialEq, Debug)]
 pub struct GfskCommand {
     /// GFSK frequency in MHz
@@ -75,6 +82,7 @@ pub struct GfskCommand {
     pub operation: Operation,
 }
 
+#[cfg(feature = "util")]
 #[derive(StructOpt, PartialEq, Debug)]
 pub struct Transmit {
     /// Data to be transmitted
@@ -98,6 +106,7 @@ pub struct Transmit {
     pub poll_interval: HumanDuration,
 }
 
+#[cfg(feature = "util")]
 #[derive(StructOpt, PartialEq, Debug)]
 pub struct Receive {
     /// Run continuously
@@ -108,7 +117,7 @@ pub struct Receive {
     #[structopt(long = "poll-interval", default_value = "1ms")]
     pub poll_interval: HumanDuration,
 }
-
+#[cfg(feature = "util")]
 #[derive(StructOpt, PartialEq, Debug)]
 pub struct Rssi {
     /// Specify period for RSSI polling
@@ -120,6 +129,7 @@ pub struct Rssi {
     pub continuous: bool,
 }
 
+#[cfg(feature = "util")]
 #[derive(StructOpt, PartialEq, Debug)]
 pub struct Repeat {
     /// Run continuously

@@ -5,11 +5,12 @@
 //! Copyright 2019 Ryan Kurte
 
 use log::{trace, debug, info, error};
-use simplelog::{TermLogger, TerminalMode, LevelFilter};
+use simplelog::{ColorChoice, LevelFilter, TermLogger, TerminalMode};
 
+#[cfg(feature = "util")]
 use structopt::StructOpt;
 
-
+#[cfg(feature = "util")]
 use driver_pal::hal::{HalInst, HalDelay};
 
 use radio_sx127x::prelude::*;
@@ -30,7 +31,7 @@ fn main() {
     log_config.add_filter_ignore("driver_pal".to_string());
     log_config.set_location_level(LevelFilter::Off);
 
-    TermLogger::init(opts.log_level, log_config.build(), TerminalMode::Mixed).unwrap();
+    TermLogger::init(opts.log_level, log_config.build(), TerminalMode::Mixed, ColorChoice::Auto).unwrap();
 
     debug!("Connecting to SPI device");
 
@@ -76,7 +77,7 @@ fn main() {
 
     debug!("Creating radio instance");
     let mut radio =
-        Sx127x::spi(spi, pins.cs, pins.busy, pins.ready, pins.reset, HalDelay {}, &config).expect("error creating device");
+        Sx127x::spi(spi, pins.busy, pins.ready, pins.reset, HalDelay {}, &config).expect("error creating device");
 
     debug!("Executing command");
     match opts.command {

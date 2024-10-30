@@ -12,12 +12,15 @@
 use core::convert::TryFrom;
 use core::fmt::Debug;
 
-use base::{Base, SpiBase, HalError};
+use base::{Base, HalError};
 use log::{trace, debug, warn};
 
-use embedded_hal::spi::{Mode as SpiMode, Phase, Polarity};
-use embedded_hal::delay::blocking::{DelayUs};
-use embedded_hal::digital::blocking::{InputPin, OutputPin};
+use embedded_hal::{
+    delay::DelayNs, 
+    digital::{InputPin, OutputPin}, 
+    spi::{Mode as SpiMode, Phase, Polarity, SpiDevice, Error as SpiError},
+};
+
 
 use radio::{Power as _, State as _};
 
@@ -97,37 +100,33 @@ impl Default for Settings {
     }
 }
 
-pub type Sx127xSpi<Spi, CsPin, BusyPin, ReadyPin, SdnPin, Delay> = Sx127x<base::Base<Spi, CsPin, BusyPin, ReadyPin, SdnPin, Delay>>;
+pub type Sx127xSpi<Spi, BusyPin, ReadyPin, SdnPin, Delay> = Sx127x<base::Base<Spi, BusyPin, ReadyPin, SdnPin, Delay>>;
 
-impl<Spi, CsPin, BusyPin, ReadyPin, SdnPin, PinError, Delay>
+impl<Spi, BusyPin, ReadyPin, SdnPin, PinError, Delay>
     Sx127x<
-        Base<Spi, CsPin, BusyPin, ReadyPin, SdnPin, Delay>,
+        Base<Spi, BusyPin, ReadyPin, SdnPin, Delay>,
     >
 where
-    Spi: SpiBase,
-    <Spi as SpiBase>::Error: Debug,
+    Spi: SpiDevice,
 
-    CsPin: OutputPin<Error = PinError>,
     BusyPin: InputPin<Error = PinError>,
     ReadyPin: InputPin<Error = PinError>,
     SdnPin: OutputPin<Error = PinError>,
     PinError: Debug,
 
-    Delay: DelayUs,
-    <Delay as DelayUs>::Error: Debug,
+    Delay: DelayNs,
 {
     /// Create an Sx127x with the provided SPI implementation and pins
     pub fn spi(
         spi: Spi,
-        cs: CsPin,
         busy: BusyPin,
         ready: ReadyPin,
         sdn: SdnPin,
         delay: Delay,
         config: &Config,
-    ) -> Result<Self, Error<HalError<<Spi as SpiBase>::Error, PinError, <Delay as DelayUs>::Error>>> {
+    ) -> Result<Self, Error<HalError<<Spi as embedded_hal::spi::ErrorType>::Error, PinError>>> {
         // Create SpiWrapper over spi/cs/busy/ready/reset
-        let base = Base{spi, cs, sdn, busy, ready, delay};
+        let base = Base{spi, sdn, busy, ready, delay};
 
         // Create instance with new hal
         Self::new(base, config)
@@ -267,7 +266,7 @@ where
             }
             
 
-            self.hal.delay_ms(1)?;
+            self.hal.delay_ms(1);
             ticks += 1;
         }
         Ok(())
@@ -407,14 +406,12 @@ where
     }
 }
 
-impl<Hal> DelayUs for Sx127x<Hal>
+impl<Hal> DelayNs for Sx127x<Hal>
 where
     Hal: base::Hal,
 {
-    type Error = Error<<Hal as base::Hal>::Error>;
-
-    fn delay_us(&mut self, t: u32) -> Result<(), Error<<Hal as base::Hal>::Error>> {
-        self.hal.delay_us(t).map_err(Error::Hal)
+    fn delay_ns(&mut self, ns: u32) {
+        self.hal.delay_ns(ns);
     }
 }
 

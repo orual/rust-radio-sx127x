@@ -245,6 +245,12 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "773648b94d0e5d620f64f280777445740e61fe701025087ec8b57f45c791888b"
 
 [[package]]
+name = "critical-section"
+version = "1.2.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "790eea4361631c5e7d22598ecd5723ff611904e3344ce8720784c93e3d83d40b"
+
+[[package]]
 name = "deranged"
 version = "0.3.11"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -275,13 +281,14 @@ dependencies = [
 
 [[package]]
 name = "driver-pal"
-version = "0.8.0"
+version = "0.9.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d29f52a7cecd4f7c61ee79d0e6afcf5719bd9e49b8a8c83b428bb0935ca17e60"
+checksum = "915d7c338d7deef785f8a30e5679267847db5b2681f13b86c796846024ef9647"
 dependencies = [
  "clap 4.5.20",
  "driver-cp2130",
  "embedded-hal",
+ "embedded-hal-bus",
  "linux-embedded-hal",
  "log",
  "serde",
@@ -294,6 +301,16 @@ name = "embedded-hal"
 version = "1.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "361a90feb7004eca4019fb28352a9465666b24f840f5c3cddf0ff13920590b89"
+
+[[package]]
+name = "embedded-hal-bus"
+version = "0.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "57b4e6ede84339ebdb418cd986e6320a34b017cdf99b5cc3efceec6450b06886"
+dependencies = [
+ "critical-section",
+ "embedded-hal",
+]
 
 [[package]]
 name = "embedded-hal-nb"
@@ -673,9 +690,9 @@ dependencies = [
 
 [[package]]
 name = "radio"
-version = "0.11.1"
+version = "0.12.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "9b5db8d0fe5e071842a0c435e65c7eb13fbf2c44bd90a3da722f2bf2bcbb2df7"
+checksum = "aa4c686c05c7067630840a63ff7cbbd817f9982b0b4cce2f978bbfaf731b104f"
 dependencies = [
  "chrono",
  "embedded-hal",
@@ -696,7 +713,7 @@ dependencies = [
  "log",
  "radio",
  "serde",
- "simplelog 0.8.0",
+ "simplelog 0.12.2",
  "structopt",
 ]
 
@@ -807,17 +824,6 @@ dependencies = [
  "scopeguard",
  "unescaper",
  "winapi",
-]
-
-[[package]]
-name = "simplelog"
-version = "0.8.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "2b2736f58087298a448859961d3f4a0850b832e72619d75adc69da7993c2cd3c"
-dependencies = [
- "chrono",
- "log",
- "termcolor",
 ]
 
 [[package]]
