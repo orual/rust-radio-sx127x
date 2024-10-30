@@ -7,7 +7,7 @@ use core::fmt::Debug;
 
 use embedded_hal::digital::{InputPin, OutputPin};
 use embedded_hal::delay::DelayNs;
-use embedded_hal::spi::{SpiDevice, Error as SpiError};
+use embedded_hal::spi::SpiDevice;
 
 
 /// HAL trait for radio interaction, may be generic over SPI or UART connections

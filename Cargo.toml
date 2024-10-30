@@ -16,6 +16,7 @@ util = [ "structopt", "driver-pal", "driver-pal/hal", "simplelog", "humantime" ]
 default = [ "simplelog", "humantime", "serde", "driver-pal/hal-cp2130", "driver-pal/hal-linux" ]
 defmt = [ ]
 nope = [ ] # disabled until fixed
+minimal = ["serde" ]
 
 [dependencies]
 radio = "0.12.1"
@@ -24,7 +25,7 @@ libc = "0.2"
 log = { version = "0.4" }
 bitflags = "1.0"
 
-driver-pal = { version = "0.9.0", default_features = false, optional=true }
+driver-pal = { version = "0.9.0", default-features = false, optional=true }
 
 serde = { version = "1.0", default-features = false, features = ["derive"], optional = true }
 structopt = { version = "0.3.21", optional = true }

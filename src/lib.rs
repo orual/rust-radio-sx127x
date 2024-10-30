@@ -18,7 +18,7 @@ use log::{trace, debug, warn};
 use embedded_hal::{
     delay::DelayNs, 
     digital::{InputPin, OutputPin}, 
-    spi::{Mode as SpiMode, Phase, Polarity, SpiDevice, Error as SpiError},
+    spi::{Mode as SpiMode, Phase, Polarity, SpiDevice},
 };
 
 
