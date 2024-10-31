@@ -7,6 +7,7 @@ use std::thread;
 use std::time::Duration;
 
 extern crate driver_pal;
+#[cfg(feature = "util")]
 use driver_pal::utils::{load_config, DeviceConfig};
 
 extern crate radio_sx127x;
@@ -17,6 +18,7 @@ use radio::{Receive, Transmit};
 
 #[test]
 #[ignore]
+#[cfg(feature = "util")]
 fn integration() {
     // Fetch configuration file name
     let config_file = match std::env::var("SX127x_TEST_CONFIG") {
